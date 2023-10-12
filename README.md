@@ -18,11 +18,54 @@ you submit for scraping.
 The following code sends a request and retrieves HTML content, including
 Airbnb search results localized for the United States region:
 
+```python
+import requests
+from pprint import pprint
+
+# Structure payload.
+payload = {
+   'source': 'universal',
+   'url': 'https://www.airbnb.com/?tab_id=home_tab&refinement_paths%5B%5D=/homes&search_mode=flex_destinations_search&flexible_trip_lengths%5B%5D=one_week&location_search=MIN_MAP_BOUNDS&monthly_start_date=2023-07-01&monthly_length=3&price_filter_input_type=0&price_filter_num_nights=5&channel=EXPLORE&search_type=category_change&category_tag=Tag:8522',
+   'geo_location': 'United States',
+   'render': 'html'
+}
+
+# Get a response.
+response = requests.request(
+    'POST',
+    'https://realtime.oxylabs.io/v1/queries',
+    auth=('USERNAME', 'PASSWORD'), #Your credentials go here
+    json=payload,
+)
+
+# Instead of response with job status and results URL, this will return the
+# JSON response with results.
+pprint(response.json())
+```
+
 Visit the
 [<u>documentation</u>](https://developers.oxylabs.io/scraper-apis/web-scraper-api)
 to see more details, such as payload parameters.
 
 ### Output sample
+
+```json
+{
+    "results": [
+        {
+            "content":"<!doctype html>\n<html lang=\"en\">\n<head>
+            ...
+            </script></body>\n</html>\n",
+            "created_at": "2023-06-12 14:45:51",
+            "updated_at": "2023-06-12 14:45:54",
+            "page": 1,
+            "url": "https://www.airbnb.com/?tab_id=home_tab&refinement_paths%5B%5D=/homes&search_mode=flex_destinations_search&flexible_trip_lengths%5B%5D=one_week&location_search=MIN_MAP_BOUNDS&monthly_start_date=2023-07-01&monthly_length=3&price_filter_input_type=0&price_filter_num_nights=5&channel=EXPLORE&search_type=category_change&category_tag=Tag:8522",
+            "job_id": "7074034071101255681",
+            "status_code": 200
+        }
+    ]
+}
+```
 
 With Oxylabs’ Airbnb Scraper API, you can easily scrape Airbnb on a
 large scale without blocks and collect public Airbnb data like listings,
